@@ -19,6 +19,7 @@
     "eslint-plugin-react-hooks": "^4.3.0"
   },
   "dependencies": {
+    "express": "^4.17.3",
     "node-telegram-bot-api": "^0.56.0",
     "nodemon": "^2.0.15"
   }
