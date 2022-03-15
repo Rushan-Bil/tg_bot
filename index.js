@@ -35,7 +35,7 @@ const start = () => {
       // console.log(msg.photo[3].file_id);
       // const fileId = msg.photo[3].file_id;
       const fileId = msg.photo[0].file_id;
-      console.log(fileId, '======> fileId');
+      console.log('fileId =============> ', fileId);
       try {
         const image = await bot.getFile({ file_id: fileId });
         console.log(image, '============> image');
@@ -44,7 +44,7 @@ const start = () => {
       }
     }
     if (text === '/start') {
-      await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot. =======)');
+      await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
       return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
     }
     if (text === '/info') {
