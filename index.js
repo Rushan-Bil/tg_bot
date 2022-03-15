@@ -23,8 +23,8 @@ const gameOptions = {
 };
 
 bot.setMyCommands([
-  { command: '/start', description: 'Greeting' },
-  { command: '/info', description: 'Get a username' },
+  { command: '/start', description: 'Start' },
+  // { command: '/info', description: 'Get a username' },
   { command: '/recognize', description: 'Recognize photos' },
   { command: '/game', description: 'Play the "Guess" game' },
   // { command: '/dontclickthis', description: '!Не нажимай сюда!' },
@@ -44,13 +44,13 @@ const start = () => {
     const { text } = msg;
     const chatId = msg.chat.id;
     if (text === '/start') {
-      return bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
+      return bot.sendMessage(chatId, `Hello, ${msg.from.first_name}! I'm telegram bot tg_0903_bot.`);
       // await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
       // return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
     }
-    if (text === '/info') {
-      return bot.sendMessage(chatId, `Your name is ${msg.from.first_name}`);
-    }
+    // if (text === '/info') {
+    //   return bot.sendMessage(chatId, `Your name is ${msg.from.first_name}`);
+    // }
     if (text === '/recognize') {
       // let description = '';
       await bot.sendMessage(chatId, 'Upload your photo');
