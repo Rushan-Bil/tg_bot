@@ -23,18 +23,18 @@ const gameOptions = {
 };
 
 bot.setMyCommands([
-  { command: '/start', description: 'Приветствие' },
-  { command: '/info', description: 'Получить имя пользователя' },
-  { command: '/want', description: 'Узнать, чего хочет кот' },
-  { command: '/game', description: 'Поиграть с котом' },
+  { command: '/start', description: 'Greeting' },
+  { command: '/info', description: 'Get a username' },
+  // { command: '/want', description: 'Узнать, чего хочет кот' },
+  { command: '/game', description: 'Play the "Guess" game' },
   // { command: '/dontclickthis', description: '!Не нажимай сюда!' },
 ]);
 
 const start = () => {
   function imageParser(arr) {
-    let text = 'На фото изображены: \n';
+    let text = 'The photo shows: \n';
     for (let i = 0; i < 8; i += 1) {
-      text += `"${arr[i].tag.en}" с вероятностью ${Math.round(arr[i].confidence)}%, \n`;
+      text += `"${arr[i].tag.en}", confidence: ${Math.round(arr[i].confidence)}%, \n`;
     }
     return text;
   }
@@ -45,13 +45,13 @@ const start = () => {
     const chatId = msg.chat.id;
     if (msg.photo && msg.photo[msg.photo.length - 1]) {
       const fileId = msg.photo[msg.photo.length - 1].file_id;
-      console.log('fileId =============> ', fileId);
+      // console.log('fileId =============> ', fileId);
       try {
         const image = await bot.getFile(fileId);
-        console.log('image ============> ', image);
+        // console.log('image ============> ', image);
 
         const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
-        console.log(url);
+        // console.log(url);
 
         const apiKey = 'acc_52af968c4d24992';
         const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
@@ -79,25 +79,26 @@ const start = () => {
       }
     }
     if (text === '/start') {
-      await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
-      return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
+      return bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
+      // await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
+      // return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
     }
     if (text === '/info') {
       return bot.sendMessage(chatId, `Your name is ${msg.from.first_name}`);
     }
-    if (text === '/want') {
-      return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
-    }
+    // if (text === '/want') {
+    //   return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
+    // }
     // if (text === '/dontclickthis') {
     //   return bot.sendMessage(chatId, 'Рушан любит Олечку!');
     // }
     if (text === '/game') {
-      await bot.sendMessage(chatId, 'Я загадаю число от 0 до 9, а ты попробуй отгадать это число.');
+      await bot.sendMessage(chatId, 'I\'ll think of a number from 0 to 9, and you try to guess this number.');
       const randomNum = Math.floor(Math.random() * (9 - 0 + 1)) + 0;
       chats[chatId] = randomNum;
-      return bot.sendMessage(chatId, 'Всё! Я загадал. Как ты думаешь, какое это число?', gameOptions);
+      return bot.sendMessage(chatId, 'Ok, I got it! What do you think is my number?', gameOptions);
     }
-    return bot.sendMessage(chatId, 'Я не понимаю, что ты имеешь в виду. Попробуй написать по-другому.');
+    return bot.sendMessage(chatId, 'I don\'t understand what you mean. Try again.');
   });
 
   bot.on('callback_query', async (msg) => {
@@ -106,11 +107,11 @@ const start = () => {
     if (chats[chatId]) {
       if (Number(data) === chats[chatId]) {
         chats[chatId] = false;
-        return bot.sendMessage(chatId, `Поздравляю! Всё верно! Я загадал ${data}`);
+        return bot.sendMessage(chatId, `Congratulations! That's right! My nubmer is ${data}`);
       }
-      return bot.sendMessage(chatId, 'Попробуй еще раз');
+      return bot.sendMessage(chatId, 'Try again');
     }
-    return bot.sendMessage(chatId, 'Я ещё не загадал число. Начни игру заново /game');
+    return bot.sendMessage(chatId, 'I\'m not ready yet. Restart the /game');
   });
 };
 
