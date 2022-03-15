@@ -37,8 +37,9 @@ const start = () => {
       const fileId = msg.photo[0].file_id;
       console.log('fileId =============> ', fileId);
       try {
-        const image = await bot.getFile({ file_id: fileId });
-        console.log(image, '============> image');
+        // const image = await bot.getFile({ file_id: fileId });
+        const image = await bot.getFile(fileId);
+        console.log('image ============> ', image);
       } catch (error) {
         console.log(error);
       }
