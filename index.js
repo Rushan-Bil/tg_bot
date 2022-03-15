@@ -31,10 +31,10 @@ const start = () => {
     const { text } = msg;
     const chatId = msg.chat.id;
     // if (msg.photo && msg.photo[3]) {
-    if (msg.photo && msg.photo[0]) {
+    if (msg.photo && msg.photo[msg.photo.length - 1]) {
       // console.log(msg.photo[3].file_id);
       // const fileId = msg.photo[3].file_id;
-      const fileId = msg.photo[0].file_id;
+      const fileId = msg.photo[msg.photo.length - 1].file_id;
       console.log('fileId =============> ', fileId);
       try {
         // const image = await bot.getFile({ file_id: fileId });
