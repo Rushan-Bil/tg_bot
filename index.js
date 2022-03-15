@@ -27,14 +27,14 @@ bot.setMyCommands([
   { command: '/info', description: 'Получить имя пользователя' },
   { command: '/want', description: 'Узнать, чего хочет кот' },
   { command: '/game', description: 'Поиграть с котом' },
-  { command: '/dontclickthis', description: '!Не нажимай сюда!' },
+  // { command: '/dontclickthis', description: '!Не нажимай сюда!' },
 ]);
 
 const start = () => {
   function imageParser(arr) {
     let text = 'На фото изображены: \n';
     for (let i = 0; i < 8; i += 1) {
-      text += `${arr[i].tag.en} с вероятностью ${arr[i].confidence}, \n`;
+      text += `"${arr[i].tag.en}" с вероятностью ${Math.round(arr[i].confidence)}%, \n`;
     }
     return text;
   }
@@ -88,9 +88,9 @@ const start = () => {
     if (text === '/want') {
       return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
     }
-    if (text === '/dontclickthis') {
-      return bot.sendMessage(chatId, 'Рушан любит Олечку!');
-    }
+    // if (text === '/dontclickthis') {
+    //   return bot.sendMessage(chatId, 'Рушан любит Олечку!');
+    // }
     if (text === '/game') {
       await bot.sendMessage(chatId, 'Я загадаю число от 0 до 9, а ты попробуй отгадать это число.');
       const randomNum = Math.floor(Math.random() * (9 - 0 + 1)) + 0;
