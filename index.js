@@ -4,6 +4,8 @@ import got from 'got';
 // require('dotenv').config();
 import 'dotenv/config';
 
+const Markup
+
 // const TelegramApi = require('node-telegram-bot-api');
 import TelegramApi from 'node-telegram-bot-api';
 
@@ -25,7 +27,7 @@ const gameOptions = {
 bot.setMyCommands([
   { command: '/start', description: 'Greeting' },
   { command: '/info', description: 'Get a username' },
-  // { command: '/want', description: 'Узнать, чего хочет кот' },
+  { command: '/recognize', description: 'Recognize photos' },
   { command: '/game', description: 'Play the "Guess" game' },
   // { command: '/dontclickthis', description: '!Не нажимай сюда!' },
 ]);
@@ -43,41 +45,6 @@ const start = () => {
     // console.log(msg);
     const { text } = msg;
     const chatId = msg.chat.id;
-    if (msg.photo && msg.photo[msg.photo.length - 1]) {
-      const fileId = msg.photo[msg.photo.length - 1].file_id;
-      // console.log('fileId =============> ', fileId);
-      try {
-        const image = await bot.getFile(fileId);
-        // console.log('image ============> ', image);
-
-        const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
-        // console.log(url);
-
-        const apiKey = 'acc_52af968c4d24992';
-        const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
-        const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
-
-        (async () => {
-          try {
-            // const id = req.session.userid;
-            const response = await got(imageUrl, { username: apiKey, password: apiSecret });
-            // console.log(response);
-            const body = JSON.parse(response.body);
-            // console.log(body.result.tags);
-            const description = imageParser(body.result.tags);
-            console.log(description);
-            // await Image.create({ url, body: description, user_id: id });
-            // req.session.url = url;
-            // req.session.description = description;
-            // res.redirect('/user/profile');
-          } catch (error) {
-            console.log(error.response);
-          }
-        })();
-      } catch (error) {
-        console.log(error);
-      }
-    }
     if (text === '/start') {
       return bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
       // await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
@@ -86,9 +53,47 @@ const start = () => {
     if (text === '/info') {
       return bot.sendMessage(chatId, `Your name is ${msg.from.first_name}`);
     }
-    // if (text === '/want') {
-    //   return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
-    // }
+    if (text === '/recognize') {
+      // let description = '';
+      await bot.sendMessage(chatId, 'Upload your photo');
+      if (msg.photo && msg.photo[msg.photo.length - 1]) {
+        const fileId = msg.photo[msg.photo.length - 1].file_id;
+        // console.log('fileId =============> ', fileId);
+        try {
+          const image = await bot.getFile(fileId);
+          // console.log('image ============> ', image);
+
+          const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
+          // console.log(url);
+
+          const apiKey = 'acc_52af968c4d24992';
+          const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
+          const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
+
+          (async () => {
+            try {
+              // const id = req.session.userid;
+              const response = await got(imageUrl, { username: apiKey, password: apiSecret });
+              // console.log(response);
+              const body = JSON.parse(response.body);
+              // console.log(body.result.tags);
+              const description = imageParser(body.result.tags);
+              console.log(description);
+              await bot.sendMessage(chatId, description);
+              // await Image.create({ url, body: description, user_id: id });
+              // req.session.url = url;
+              // req.session.description = description;
+              // res.redirect('/user/profile');
+            } catch (error) {
+              console.log(error.response);
+            }
+          })();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      // return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
+    }
     // if (text === '/dontclickthis') {
     //   return bot.sendMessage(chatId, 'Рушан любит Олечку!');
     // }
