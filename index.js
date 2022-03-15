@@ -31,6 +31,14 @@ bot.setMyCommands([
 ]);
 
 const start = () => {
+  function imageParser(arr) {
+    let text = 'На фото изображены: \n';
+    for (let i = 0; i < 8; i += 1) {
+      text += `${arr[i].tag.en} с вероятностью ${arr[i].confidence}, \n`;
+    }
+    return text;
+  }
+
   bot.on('message', async (msg) => {
     // console.log(msg);
     const { text } = msg;
@@ -55,8 +63,9 @@ const start = () => {
             const response = await got(imageUrl, { username: apiKey, password: apiSecret });
             // console.log(response);
             const body = JSON.parse(response.body);
-            console.log(body.result.tags);
-            // const description = imageParser(body.result.tags);
+            // console.log(body.result.tags);
+            const description = imageParser(body.result.tags);
+            console.log(description);
             // await Image.create({ url, body: description, user_id: id });
             // req.session.url = url;
             // req.session.description = description;
