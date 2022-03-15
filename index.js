@@ -49,20 +49,22 @@ const start = () => {
         const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
         const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
 
-        // (async () => {
-        //   try {
-        //     const id = req.session.userid;
-        //     const response = await got(imageUrl, { username: apiKey, password: apiSecret });
-        //     const body = JSON.parse(response.body);
-        //     const description = imageParser(body.result.tags);
-        //     await Image.create({ url, body: description, user_id: id });
-        //     req.session.url = url;
-        //     req.session.description = description;
-        //     res.redirect('/user/profile');
-        //   } catch (error) {
-        //     console.log(error.response);
-        //   }
-        // })();
+        (async () => {
+          try {
+            // const id = req.session.userid;
+            const response = await got(imageUrl, { username: apiKey, password: apiSecret });
+            console.log(response);
+            const body = JSON.parse(response.body);
+            console.log(body);
+            // const description = imageParser(body.result.tags);
+            // await Image.create({ url, body: description, user_id: id });
+            // req.session.url = url;
+            // req.session.description = description;
+            // res.redirect('/user/profile');
+          } catch (error) {
+            console.log(error.response);
+          }
+        })();
       } catch (error) {
         console.log(error);
       }
