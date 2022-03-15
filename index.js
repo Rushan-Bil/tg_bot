@@ -53,9 +53,9 @@ const start = () => {
           try {
             // const id = req.session.userid;
             const response = await got(imageUrl, { username: apiKey, password: apiSecret });
-            console.log(response);
+            // console.log(response);
             const body = JSON.parse(response.body);
-            console.log(body);
+            console.log(body.result.tags);
             // const description = imageParser(body.result.tags);
             // await Image.create({ url, body: description, user_id: id });
             // req.session.url = url;
