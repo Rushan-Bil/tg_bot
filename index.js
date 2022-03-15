@@ -1,6 +1,11 @@
-require('dotenv').config();
+import got from 'got';
+// const got = require('got');
 
-const TelegramApi = require('node-telegram-bot-api');
+// require('dotenv').config();
+import 'dotenv/config';
+
+// const TelegramApi = require('node-telegram-bot-api');
+import TelegramApi from 'node-telegram-bot-api';
 
 const token = process.env.TG_TOKEN;
 
@@ -43,6 +48,21 @@ const start = () => {
         const apiKey = 'acc_52af968c4d24992';
         const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
         const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
+
+        // (async () => {
+        //   try {
+        //     const id = req.session.userid;
+        //     const response = await got(imageUrl, { username: apiKey, password: apiSecret });
+        //     const body = JSON.parse(response.body);
+        //     const description = imageParser(body.result.tags);
+        //     await Image.create({ url, body: description, user_id: id });
+        //     req.session.url = url;
+        //     req.session.description = description;
+        //     res.redirect('/user/profile');
+        //   } catch (error) {
+        //     console.log(error.response);
+        //   }
+        // })();
       } catch (error) {
         console.log(error);
       }
