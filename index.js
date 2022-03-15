@@ -4,8 +4,6 @@ import got from 'got';
 // require('dotenv').config();
 import 'dotenv/config';
 
-const Markup
-
 // const TelegramApi = require('node-telegram-bot-api');
 import TelegramApi from 'node-telegram-bot-api';
 
