@@ -2,34 +2,6 @@ import got from 'got';
 import 'dotenv/config';
 import TelegramApi from 'node-telegram-bot-api';
 
-import * as textToSpeech from '@google-cloud/text-to-speech';
-// const fs = require('fs');
-import * as fs from 'fs';
-import * as util from 'util';
-// const util = require('util');
-
-const client = new textToSpeech.TextToSpeechClient();
-async function getVoice(textToVoice) {
-  // The text to synthesize
-  const text = textToVoice;
-
-  // Construct the request
-  const request = {
-    input: { text },
-    // Select the language and SSML voice gender (optional)
-    voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
-    // select the type of audio encoding
-    audioConfig: { audioEncoding: 'MP3' },
-  };
-
-  // Performs the text-to-speech request
-  const [response] = await client.synthesizeSpeech(request);
-  // Write the binary audio content to a local file
-  const writeFile = util.promisify(fs.writeFile);
-  await writeFile('output.mp3', response.audioContent, 'binary');
-  console.log('Audio content written to file: output.mp3');
-}
-
 const token = process.env.TG_TOKEN;
 
 const bot = new TelegramApi(token, { polling: true });
@@ -66,7 +38,7 @@ const start = () => {
 
     switch (text) {
       case '/start':
-        return bot.sendMessage(chatId, `Hello, ${msg.from.first_name}! I'm telegram bot tg_0903_bot.`);
+        return bot.sendMessage(chatId, `Hello, ${msg.from.first_name}!\nI'm telegram bot tg_0903_bot.`);
 
       case '/recognize':
         return bot.sendMessage(chatId, 'Upload your photo');
@@ -92,8 +64,6 @@ const start = () => {
                 const response = await got(imageUrl, { username: apiKey, password: apiSecret });
                 const body = JSON.parse(response.body);
                 const description = imageParser(body.result.tags);
-                console.log(description);
-                await getVoice(description);
                 return bot.sendMessage(chatId, description);
               } catch (error) {
                 console.log(error.response);
