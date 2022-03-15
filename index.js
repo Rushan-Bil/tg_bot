@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 3000));
 
 const TelegramApi = require('node-telegram-bot-api');
 
@@ -31,10 +31,24 @@ bot.setMyCommands([
 
 const start = () => {
   bot.on('message', async (msg) => {
+    // console.log(msg);
     const { text } = msg;
     const chatId = msg.chat.id;
+    // if (msg.photo && msg.photo[3]) {
+    if (msg.photo && msg.photo[0]) {
+      // console.log(msg.photo[3].file_id);
+      // const fileId = msg.photo[3].file_id;
+      const fileId = msg.photo[0].file_id;
+      console.log(fileId, '======> fileId');
+      try {
+        const image = await bot.getFile({ file_id: fileId });
+        console.log(image, '============> image');
+      } catch (error) {
+        console.log(error);
+      }
+    }
     if (text === '/start') {
-      await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
+      await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot. =======)');
       return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
     }
     if (text === '/info') {
@@ -58,7 +72,6 @@ const start = () => {
   bot.on('callback_query', async (msg) => {
     const { data } = msg;
     const chatId = msg.message.chat.id;
-    console.log(chats[chatId]);
     if (chats[chatId]) {
       if (Number(data) === chats[chatId]) {
         chats[chatId] = false;
