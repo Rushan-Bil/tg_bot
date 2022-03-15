@@ -1,10 +1,5 @@
 import got from 'got';
-// const got = require('got');
-
-// require('dotenv').config();
 import 'dotenv/config';
-
-// const TelegramApi = require('node-telegram-bot-api');
 import TelegramApi from 'node-telegram-bot-api';
 
 const token = process.env.TG_TOKEN;
@@ -24,15 +19,13 @@ const gameOptions = {
 
 bot.setMyCommands([
   { command: '/start', description: 'Start' },
-  // { command: '/info', description: 'Get a username' },
   { command: '/recognize', description: 'Recognize photos' },
   { command: '/game', description: 'Play the "Guess" game' },
-  // { command: '/dontclickthis', description: '!Не нажимай сюда!' },
 ]);
 
 const start = () => {
   function imageParser(arr) {
-    let text = 'The photo shows: \n';
+    let text = 'On your photo: \n';
     for (let i = 0; i < 8; i += 1) {
       text += `"${arr[i].tag.en}", confidence: ${Math.round(arr[i].confidence)}%, \n`;
     }
@@ -40,18 +33,17 @@ const start = () => {
   }
 
   bot.on('message', async (msg) => {
-    // console.log(msg);
     const { text } = msg;
     const chatId = msg.chat.id;
 
     switch (text) {
-      case '/start': // if (x === 'value1')
+      case '/start':
         return bot.sendMessage(chatId, `Hello, ${msg.from.first_name}! I'm telegram bot tg_0903_bot.`);
 
-      case '/recognize': // if (x === 'value2')
+      case '/recognize':
         return bot.sendMessage(chatId, 'Upload your photo');
 
-      case '/game': // if (x === 'value2')
+      case '/game':
         await bot.sendMessage(chatId, 'I\'ll think of a number from 0 to 9, and you try to guess this number.');
         const randomNum = Math.floor(Math.random() * (9 - 0 + 1)) + 0;
         chats[chatId] = randomNum;
@@ -60,32 +52,20 @@ const start = () => {
       default:
         if (msg.photo && msg.photo[msg.photo.length - 1]) {
           const fileId = msg.photo[msg.photo.length - 1].file_id;
-          // console.log('fileId =============> ', fileId);
           try {
             const image = await bot.getFile(fileId);
-            // console.log('image ============> ', image);
-
             const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
-            // console.log(url);
-
             const apiKey = process.env.IMAGGA_API_KEY;
             const apiSecret = process.env.IMAGGA_API_SECRET;
             const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
 
             (async () => {
               try {
-                // const id = req.session.userid;
                 const response = await got(imageUrl, { username: apiKey, password: apiSecret });
-                // console.log(response);
                 const body = JSON.parse(response.body);
-                // console.log(body.result.tags);
                 const description = imageParser(body.result.tags);
                 console.log(description);
-                await bot.sendMessage(chatId, description);
-                // await Image.create({ url, body: description, user_id: id });
-                // req.session.url = url;
-                // req.session.description = description;
-                // res.redirect('/user/profile');
+                return bot.sendMessage(chatId, description);
               } catch (error) {
                 console.log(error.response);
               }
@@ -97,66 +77,6 @@ const start = () => {
           return bot.sendMessage(chatId, 'I don\'t understand what you mean. Try again.');
         }
     }
-
-    //   if (text === '/start') {
-    //     return bot.sendMessage(chatId, `Hello, ${msg.from.first_name}! I'm telegram bot tg_0903_bot.`);
-    //     // await bot.sendMessage(chatId, 'Hello! I\'m telegram bot tg_0903_bot.');
-    //     // return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/8.webp');
-    //   }
-    //   // if (text === '/info') {
-    //   //   return bot.sendMessage(chatId, `Your name is ${msg.from.first_name}`);
-    //   // }
-    //   if (text === '/recognize') {
-    //     // let description = '';
-    //     await bot.sendMessage(chatId, 'Upload your photo');
-    //     if (msg.photo && msg.photo[msg.photo.length - 1]) {
-    //       const fileId = msg.photo[msg.photo.length - 1].file_id;
-    //       // console.log('fileId =============> ', fileId);
-    //       try {
-    //         const image = await bot.getFile(fileId);
-    //         // console.log('image ============> ', image);
-
-    //         const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
-    //         // console.log(url);
-
-    //         const apiKey = process.env.IMAGGA_API_KEY;
-    //         const apiSecret = process.env.IMAGGA_API_SECRET;
-    //         const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
-
-    //         (async () => {
-    //           try {
-    //             // const id = req.session.userid;
-    //             const response = await got(imageUrl, { username: apiKey, password: apiSecret });
-    //             // console.log(response);
-    //             const body = JSON.parse(response.body);
-    //             // console.log(body.result.tags);
-    //             const description = imageParser(body.result.tags);
-    //             console.log(description);
-    //             await bot.sendMessage(chatId, description);
-    //             // await Image.create({ url, body: description, user_id: id });
-    //             // req.session.url = url;
-    //             // req.session.description = description;
-    //             // res.redirect('/user/profile');
-    //           } catch (error) {
-    //             console.log(error.response);
-    //           }
-    //         })();
-    //       } catch (error) {
-    //         console.log(error);
-    //       }
-    //     }
-    //     // return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/89b/055/89b05531-e12c-36dd-86ab-d7301005406f/3.webp');
-    //   }
-    //   // if (text === '/dontclickthis') {
-    //   //   return bot.sendMessage(chatId, 'Рушан любит Олечку!');
-    //   // }
-    //   if (text === '/game') {
-    //     await bot.sendMessage(chatId, 'I\'ll think of a number from 0 to 9, and you try to guess this number.');
-    //     const randomNum = Math.floor(Math.random() * (9 - 0 + 1)) + 0;
-    //     chats[chatId] = randomNum;
-    //     return bot.sendMessage(chatId, 'Ok, I got it! What do you think is my number?', gameOptions);
-    //   }
-    //   return bot.sendMessage(chatId, 'I don\'t understand what you mean. Try again.');
   });
 
   bot.on('callback_query', async (msg) => {
