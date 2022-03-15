@@ -1,12 +1,8 @@
-// const express = require('express');
-
-// const app = express();
-
-// app.set('port', (process.env.PORT || 3000));
+require('dotenv').config();
 
 const TelegramApi = require('node-telegram-bot-api');
 
-const token = '5160007362:AAHh-fdCSqHyNkcypqIWiyYrszSTGqB-UYY';
+const token = process.env.TG_TOKEN;
 
 const bot = new TelegramApi(token, { polling: true });
 const chats = {};
@@ -84,11 +80,3 @@ const start = () => {
 };
 
 start();
-
-// For avoidong Heroku $PORT error
-// app.get('/', (request, response) => {
-//   const result = 'App is running';
-//   response.send(result);
-// }).listen(app.get('port'), () => {
-//   console.log('App is running, server is listening on port ', app.get('port'));
-// });
