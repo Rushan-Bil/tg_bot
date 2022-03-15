@@ -30,16 +30,19 @@ const start = () => {
     // console.log(msg);
     const { text } = msg;
     const chatId = msg.chat.id;
-    // if (msg.photo && msg.photo[3]) {
     if (msg.photo && msg.photo[msg.photo.length - 1]) {
-      // console.log(msg.photo[3].file_id);
-      // const fileId = msg.photo[3].file_id;
       const fileId = msg.photo[msg.photo.length - 1].file_id;
       console.log('fileId =============> ', fileId);
       try {
-        // const image = await bot.getFile({ file_id: fileId });
         const image = await bot.getFile(fileId);
         console.log('image ============> ', image);
+
+        const url = `https://api.telegram.org/file/bot${process.env.TG_TOKEN}/${image.file_path}`;
+        console.log(url);
+
+        const apiKey = 'acc_52af968c4d24992';
+        const apiSecret = 'ef6e4a3bf317c39627bd379fe7777572';
+        const imageUrl = `https://api.imagga.com/v2/tags?image_url=${url}`;
       } catch (error) {
         console.log(error);
       }
