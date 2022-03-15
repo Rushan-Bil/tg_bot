@@ -1,6 +1,6 @@
 # tg_bot
 
-Telegram-bot
+**Telegram-bot**
 
 <img src="https://user-images.githubusercontent.com/95147567/158379394-a77728db-e21c-49db-a03b-7134131b3bf9.gif" width="500px"/>
 
